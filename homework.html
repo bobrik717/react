@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HomeWork</title>
+    <script src="lib/react.js"></script>
+    <script src="lib/react-dom.js"></script>
+    <script src="lib/browser.js"></script>
+</head>
+<body>
+<div id="content"></div>
+
+<script type="text/babel">
+
+    var LIST = [
+        {
+            id: 1,
+            title: 'Darth Vader',
+            body: 'http://cs7.pikabu.ru/images/big_size_comm_an/2014-03_7/13962622876915.gif',
+            documentation: '1asdf sf gsfdg sdf gsdf gsdf gsdf gsdfg sdf gsdf gdfs gsdf gsdf gsdf gsdfg sdfgsdf gdfgdhf hjs dg fdjdffg sdhgjdg sfsggfjhdffgsghdfhsdhfgsfhfg'
+        }, {
+            id: 2,
+            title: 'Princess Leia',
+            body: 'http://images6.fanpop.com/image/photos/33100000/CARRIE-FISHER-anakin-vader-and-princess-leia-33186069-190-149.gif',
+            documentation: '2asdf sf gsfdg sdf gsdf gsdf gsdf gsdfg sdf gsdf gdfs gsdf gsdf gsdf gsdfg sdfgsdf gdfgdhf hjs dg fdjdffg sdhgjdg sfsggfjhdffgsghdfhsdhfgsfhfg'
+        }, {
+            id: 3,
+            title: 'Luke Skywalker',
+            body: 'http://49.media.tumblr.com/a3b069230fe685868388332952727264/tumblr_nulgmbh10A1tu6tfso1_250.gif',
+            documentation: '3asdf sf gsfdg sdf gsdf gsdf gsdf gsdfg sdf gsdf gdfs gsdf gsdf gsdf gsdfg sdfgsdf gdfgdhf hjs dg fdjdffg sdhgjdg sfsggfjhdffgsghdfhsdhfgsfhfg'
+        }, {
+            id: 4,
+            title: 'Chewbacca',
+            body: 'https://media.giphy.com/media/RUUdVZqwpfTRS/giphy.gif',
+            documentation: '4asdf sf gsfdg sdf gsdf gsdf gsdf gsdfg sdf gsdf gdfs gsdf gsdf gsdf gsdfg sdfgsdf gdfgdhf hjs dg fdjdffg sdhgjdg sfsggfjhdffgsghdfhsdhfgsfhfg'
+        }
+    ];
+
+
+    var Note = React.createClass({
+        getInitialState: function () {
+            return {
+                isOpen: false,
+                openText: 'Open'
+            }
+        },
+
+        handleClick: function (event) {
+            if(this.state.isOpen){
+                this.setState({
+                    isOpen: false,
+                    openText: 'Open'
+                });
+            }else{
+                this.setState({
+                    isOpen: true,
+                    openText: 'Close'
+                });
+            }
+        },
+
+        render: function () {
+            var doc = '';
+            if(this.state.isOpen){
+                doc = <p>{this.props.documentation}</p>;
+            }
+            return <li>
+                <h3>{this.props.title}</h3>
+                <p>{this.props.body}</p>
+                <div onClick={this.handleClick}>{this.state.openText}</div>
+                {doc}
+            </li>
+        }
+    });
+
+    var Calculator = React.createClass({
+        getInitialState: function () {
+          return {
+              result: 'Result'
+          }
+        },
+
+        handleCalculate: function (event) {
+            var calc = document.getElementById('calc').value;
+            this.setState({
+                result: eval(calc)
+            });
+        },
+
+        render: function () {
+            return (
+                    <div>
+                        <input type="text" id="calc"/>
+                        <p>{this.state.result}</p>
+                        <button onClick={this.handleCalculate}>Calculate</button>
+                    </div>
+            );
+        }
+    });
+
+    var NotesList = React.createClass({
+        getInitialState: function () {
+            return {
+                name: 'stranger'
+            }
+        },
+
+        handleChange: function (event) {
+            var newName = event.target.value;
+            if(newName == ''){
+                newName = 'stranger';
+            }
+            this.setState({
+                name: newName
+            });
+        },
+
+        render: function () {
+            return (
+                <div>
+                    <ul>
+                        <div>
+                            <input type="text" onChange={this.handleChange} />
+                            <span>
+                                Hello, {this.state.name}!
+                            </span>
+                        </div>
+                        {
+                            LIST.map(function (el) {
+                                return <Note
+                                        key={el.id}
+                                        title={el.title}
+                                        body={el.body}
+                                        documentation={el.documentation}
+                                />
+                            })
+                        }
+                    </ul>
+                    {
+                        <Calculator />
+                    }
+                </div>
+            )
+        }
+    });
+
+    ReactDOM.render(
+            <NotesList />,
+            document.getElementById('content')
+    );
+</script>
+</body>
+</html>
